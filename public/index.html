@@ -12,37 +12,31 @@
           </header>
           <main>
             <h1>Commute Dashboard</h1>
-            <div class="date-time">
+            <div id="date-time">
                 <p id="date"></p>
                 <p id="time"></p>
             </div>
             <div id="weather">
                 <div id="start">
-                    <h2>Home</h2>
-                    <div class="now">
-                        <h3>Now</h3>
-                        <p>Temperature: <span id="start-temp"></span>&deg;F</p>
-                        <p>Precipitation Chance: <span id="start-precip-chance"></span>%</p>
-                        <p id="start-summary"></p>
-                    </div>
-                    <div class="forecast-day">
-                        <h3>Today</h3>
-                        <p>High: <span id="start-temp-high"></span>&deg;F at <span id="start-temp-high-time"></span></p>
-                        <p>Low: <span id="start-temp-low"></span>&deg;F at <span id="start-temp-low-time"></span></p>
+                    <h2>Now</h2>
+                    <div class="content">
+                        <p>Temperature: <span id="start-now-temp"></span>&deg;F</p>
+                        <p>Chance of <span id="start-precip-type"></span>: <span id="start-now-precip-chance"></span>%</p>
+                        <p><span id="start-now-summary"></span> now and <span id="start-minutely-summary"></span></p>
                     </div>
                 </div>
                 <div id="end">
-                    <h2>Work</h2>
-                    <div class="now">
-                        <h3>Now</h3>
-                        <p>Temperature: <span id="end-temp"></span>&deg;F</p>
-                        <p>Precipitation Chance: <span id="end-precip-chance"></span>%</p>
-                        <p id="end-summary"></p>
-                    </div>
-                    <div class="forecast-day">
-                        <h3>Today</h3>
-                        <p>High: <span id="end-temp-high"></span>&deg;F at <span id="end-temp-high-time"></span></p>
-                        <p>Low: <span id="end-temp-low"></span>&deg;F at <span id="end-temp-low-time"></span></p>
+                    <h2>Today</h2>
+                    <div class="content">
+                        <p id="end-hourly-summary"></p>
+                        <p>High of <span id="end-high"></span>&deg;F at <span id="end-high-time"></span></p>
+                        <div class="precip">
+                            <p>Overall chance of <span class="end-precip-type"></span>: <span id="end-precip-prob-total"></span>%</p>
+                            <div id="precip-conditional">
+                                <p>Highest chance of <span class="end-precip-type"></span>: <span id="end-precip-prob-high"></span>% at <span id="end-precip-prob-time"></span></p>
+                                <p>Highest intesnsity of <span class="end-precip-type"></span>: <span id="end-precip-intensity-high"></span> inches per hour at <span id="end-precip-intensity-time"></span></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <h2>Train Schedule</h2>
