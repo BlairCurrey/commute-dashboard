@@ -1,74 +1,75 @@
-class Weather{
-    constructor(route){
-        this.route = route;
-        this.data = null;
-        this.hour_forecast = {};
-        this.rain = {
-            total_prob: null,
-            max_prob: null,
-            max_prob_time: null,
-            max_intensity: null,
-            max_intensity_time: null
-        };
+class Page{
+    constructor(){
+        this.time = new Time();
     }
 
     async init(){
-        await this.get();
-        this.predictRain();
-        this.render();
-    }
-    
-    async get(){
-        const response = await fetch(this.route);
-        this.data = await response.json();
-        this.hourly_forecast = this.data.end.hourly.data.slice(0, 11); //gets next 12 hours
-        console.log(this.data);
-    }
-
-    predictRain() {
-        let hrs = []
-        this.hourly_forecast.forEach((hour) => {
-            hrs.push({time: hour.time, probability: 1 - hour.precipProbability, intensity: hour.precipIntensity})
-        });
-        console.log(hrs)
-
-        let max_intensity = 0;
-        let max_intensity_time;
-        let max_prob_no_rain = 1;
-        let max_prob_time;
-        let product = 1;
-
-        for(var i = 0; i < hrs.length; i++){
-            //find max intensity out of all hours
-            if(hrs[i].intensity > max_intensity){
-                max_intensity = hrs[i].intensity;
-                max_intensity_time = hrs[i].time;
-            }
-            //find the max probability of no rain out of all hours
-            if(hrs[i].probability < max_prob_no_rain){
-                max_prob_no_rain = hrs[i].probability;
-                max_prob_time = hrs[i].time;
-            }
-            //find the total probability of no rain
-            product = product * hrs[i].probability
-        }
-        this.rain.max_intensity = max_intensity;
-        this.rain.max_intensity_time = this.parse(max_intensity_time);
-        this.rain.max_prob = Number((1 - max_prob_no_rain).toFixed(2)); // (1 - probability of no rain) = probability of rain
-        this.rain.max_prob_time = this.parse(max_prob_time);
-        this.rain.total_prob = Number((1 - product).toFixed(2))
+        this.weather = new Weather('/weather');
+        await this.weather.init();
+        console.log(await this.weather.data);
+        this.rain = new Rain((await this.weather.data).end.hourly.data);
         console.log(this.rain)
     }
 
-    parse(timestamp){
-        const conv_timestamp = new Date(timestamp * 1000)
-        const time_str = conv_timestamp.toLocaleString().split(', ')[1];
-        return time_str
+    render(){
+        this.time.render();
+        this.weather.render();
+        this.rain.render();
     }
+}
+
+class Time{
+    constructor(){
+        this.set();
+    }
+
+    set(){
+        this.date_time = new Date();
+        this.date_str = Time.parseDate(this.date_time);
+        this.time_str = Time.parseTime(this.date_time);
+    }
+
+    update(){
+        this.set();
+        this.render();
+    }
+
+    static parseTime(timestamp){
+        return timestamp.toLocaleString().split(', ')[1]
+    }
+
+    static parseDate(timestamp){
+        return timestamp.toLocaleString().split(', ')[0]
+    }
+
+    render(){
+        document.getElementById('date').textContent = this.date_str;
+        document.getElementById('time').textContent = this.time_str;
+    }
+}
+class API{
+    constructor(route){
+        this.route = route;
+        this.data = null;
+    }
+
+    async init(){
+        //call after class instantiation - data cannot be fetched in constructor
+        await this.get();
+    }
+
+    async get(){
+        const response = await fetch(this.route);
+        this.data = await response.json();
+    }
+}
+
+class Weather extends API{
+
     render(){
         const start = this.data.start;
         const end = this.data.end;
-        const end_high_time = this.parse(end.daily.data[0].temperatureHighTime);
+        const end_high_time = Time.parseTime(new Date(end.daily.data[0].temperatureHighTime * 1000));
 
         //Current weather in start location
         document.getElementById('start-now-temp').textContent = start.currently.temperature;
@@ -82,50 +83,80 @@ class Weather{
         document.getElementById('end-high').textContent = end.daily.data[0].temperatureHigh;
         document.getElementById('end-high-time').textContent = end_high_time;
 
-        //Rain
-        document.getElementById('end-precip-prob-total').textContent = Math.round(this.rain.total_prob * 100);
-        document.getElementById('end-precip-prob-high').textContent = Math.round(this.rain.max_prob * 100);
-        document.getElementById('end-precip-prob-time').textContent = this.rain.max_prob_time;
-        document.getElementById('end-precip-intensity-high').textContent = this.rain.max_intensity;
-        document.getElementById('end-precip-intensity-time').textContent = this.rain.max_intensity_time;
+        //Fill precip-type classes
         let precip_type_classes = document.querySelectorAll('.end-precip-type')
         precip_type_classes.forEach(element => {
             element.textContent = end.daily.data[0].precipType;
         });
-        //Hide if chance of rain is insignificant
-        if(this.rain.total_prob <= 0.15){
+    }
+}
+
+class Rain{
+    constructor(hourly_data, hours=12){
+        this.hourly_data = hourly_data.slice(0, hours-1);
+        this.rain_hourly_data = this.getRain();
+        this.max_intensity = this.getMaxIntensity().intensity;
+        this.max_intensity_time = this.getMaxIntensity().time;
+        this.max_prob = this.getProbability().max;
+        this.max_prob_time = this.getProbability().time;
+        this.total_prob = this.getProbability().total
+    }
+
+    getRain(){
+        //Could use this.hourly_data instead of building this data structure.
+        //Using this data structure makes it much easier to debug max intensity/prob & times
+        let rain_each_hour = [];
+        this.hourly_data.forEach((hour) => {
+            rain_each_hour.push({time: hour.time, no_rain_prob: 1 - hour.precipProbability, intensity: hour.precipIntensity});
+        });
+        return rain_each_hour
+    }
+
+    getMaxIntensity(){
+        let intensity = 0;
+        let time;
+        this.rain_hourly_data.forEach(hour =>{
+            if(hour.intensity > intensity){
+                intensity = hour.intensity;
+                time = hour.time;
+            }
+        })
+        return {intensity: intensity, time: time}
+    }
+
+    getProbability(){
+        let max_prob_no_rain = 1;
+        let time;
+        let product = 1;
+        // find the max probability of NO RAIN out of all hours
+        this.rain_hourly_data.forEach(hour =>{
+            if(hour.no_rain_prob < max_prob_no_rain){
+                max_prob_no_rain = hour.no_rain_prob;
+                time = hour.time;
+            }
+            product = product * hour.no_rain_prob
+        })
+        // subtract no rain probability from 1 for probability that it DOES rain
+        return {total: 1- product, max: 1 - max_prob_no_rain, time: time}
+    }
+
+    render(){
+        document.getElementById('end-precip-prob-total').textContent = Math.round(this.total_prob * 100);
+        //Hides if chance of rain is insignificant
+        if(this.total_prob <= 0.01){
             document.getElementById('precip-conditional').style.display = 'none';
+        } else {
+        document.getElementById('end-precip-prob-high').textContent = Math.round(this.max_prob * 100);
+        document.getElementById('end-precip-prob-time').textContent = Time.parseTime(new Date(this.max_prob_time * 1000));
+        document.getElementById('end-precip-intensity-high').textContent = this.max_intensity;
+        document.getElementById('end-precip-intensity-time').textContent = Time.parseTime(new Date(this.max_intensity_time * 1000));
         }
     }
 }
 
-class Time{
-    constructor(date_id, time_id){
-        this.date_id = date_id;
-        this.time_id = time_id;
-    }
-
-    init(){
-        const date_time = new Date();
-        const parsed = this.parse(date_time);
-        this.render(parsed.date, parsed.time)
-    }
-
-    parse(timestamp){
-        const date_str = timestamp.toLocaleString().split(', ')[0];
-        const time_str = timestamp.toLocaleString().split(', ')[1];
-        return{date: date_str, time: time_str}
-    }
-
-    render(parsed_date, parsed_time){
-        document.getElementById(this.date_id).textContent = parsed_date;
-        document.getElementById(this.time_id).textContent = parsed_time;
-    }
-}
-
-document.addEventListener("DOMContentLoaded", function(event) { 
-    time = new Time('date', 'time');
-    setInterval(function(){time.init();}, 1000);
-    weather = new Weather('/weather');
-    weather.init();
+document.addEventListener("DOMContentLoaded", async function(event) { 
+    page = new Page();
+    await page.init()
+    await page.render()
+    setInterval(function(){page.time.update();}, 1000);
   });
