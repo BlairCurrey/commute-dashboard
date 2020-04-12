@@ -143,7 +143,7 @@ class Rain{
     render(){
         document.getElementById('end-precip-prob-total').textContent = Math.round(this.total_prob * 100);
         //Hides if chance of rain is insignificant
-        if(this.total_prob <= 0.01){
+        if(this.total_prob <= 0.20){
             document.getElementById('precip-conditional').style.display = 'none';
         } else {
         document.getElementById('end-precip-prob-high').textContent = Math.round(this.max_prob * 100);
