@@ -6,15 +6,19 @@ class Page{
     async init(){
         this.weather = new Weather('/weather');
         await this.weather.init();
-        console.log(await this.weather.data);
+        console.log(await this.weather);
         this.rain = new Rain((await this.weather.data).end.hourly.data);
-        console.log(this.rain)
+        console.log(this.rain);
+        this.train = new Train('/train', 'Hoboken');
+        await this.train.init();
+        console.log(await this.train);
     }
 
     render(){
         this.time.render();
         this.weather.render();
         this.rain.render();
+        this.train.render();
     }
 }
 
@@ -47,6 +51,7 @@ class Time{
         document.getElementById('time').textContent = this.time_str;
     }
 }
+
 class API{
     constructor(route){
         this.route = route;
@@ -65,7 +70,6 @@ class API{
 }
 
 class Weather extends API{
-
     render(){
         const start = this.data.start;
         const end = this.data.end;
@@ -77,11 +81,14 @@ class Weather extends API{
         document.getElementById('start-now-summary').textContent = start.currently.summary;
         document.getElementById('start-minutely-summary').textContent = start.minutely.summary;
         document.getElementById('start-precip-type').textContent = start.daily.data[0].precipType;
+        document.getElementById("start-weather-icon").setAttribute("data", `icons/${start.currently.icon}.svg`);
+
 
         //Day's weather in end location
         document.getElementById('end-hourly-summary').textContent = end.hourly.summary;
         document.getElementById('end-high').textContent = end.daily.data[0].temperatureHigh;
         document.getElementById('end-high-time').textContent = end_high_time;
+        document.getElementById("end-weather-icon").setAttribute("data", `icons/${end.daily.icon}.svg`);
 
         //Fill precip-type classes
         let precip_type_classes = document.querySelectorAll('.end-precip-type')
@@ -154,9 +161,82 @@ class Rain{
     }
 }
 
+class Train{
+    constructor(route, destination){
+        this.route = route;
+        this.destination = destination //must match destination string in departute vision
+        this.response_string = null;
+        this.html = null;
+        this.parsed_rows = null;
+    }
+
+    async init(){
+        //call after class instantiation - data cannot be fetched in constructor
+        await this.get();
+        this.buildHTML(this.respone_string);
+        this.getRows();
+    }
+
+    async get(){
+        const response = await fetch(this.route);
+        this.response_string = await response.text();
+    }
+
+    buildHTML(){
+        this.html = document.createElement('html');
+        this.html.innerHTML = this.response_string;
+    }
+
+    makeTableRows(){
+        let time_pos = 0;
+        let status_pos = 5;
+        let table_rows = [];
+
+        this.parsed_rows.forEach(element =>{
+            let row = document.createElement('tr');
+            let time = document.createElement('td');
+            let status = document.createElement('td');
+            //Fill html elements
+            let t_text = element[time_pos].innerText
+            //sets to "-" if status is blank, else sets to status
+            let s_text = (element[status_pos].innerText == " ") ? "-" : element[status_pos].innerText
+            time.innerText = t_text
+            status.textContent = s_text
+            //Build row and push to array
+            row.appendChild(time)
+            row.appendChild(status)
+            table_rows.push(row)
+        })
+        return table_rows
+    }
+
+    getRows(limit=3){
+        const rows = this.html.querySelectorAll('.table-row');
+        let matching_rows = [];
+        const destination_pos = 1; // column that destination name is located in
+        //find first three rows that have a departure that matches the given destination
+        rows.forEach(row => {
+            let columns = row.querySelectorAll('td')
+            if(columns[destination_pos].innerText.includes(this.destination)){
+                matching_rows.push(columns)    
+            }
+        });
+        this.parsed_rows = matching_rows.slice(0, limit)
+    }
+
+    render(){
+        document.getElementById('depart-from').textContent = this.html.querySelector('#Label1').textContent;
+        document.getElementById('destination-station').textContent = this.destination;
+        let table_rows = this.makeTableRows()
+        table_rows.forEach(row =>{
+            document.getElementById('sched-table-body').appendChild(row)
+        })
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async function(event) { 
     page = new Page();
-    await page.init()
-    await page.render()
+    await page.init();
+    await page.render();
     setInterval(function(){page.time.update();}, 1000);
   });
