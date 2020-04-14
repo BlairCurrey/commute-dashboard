@@ -37,3 +37,25 @@ app.get('/weather', async (req, res) => {
 
     res.json(data)
 });
+
+app.get('/train', async (req, res) => {
+    const station = 'WR';
+    const url = 'https://dv.njtransit.com/webdisplay/tid-mobile.aspx?sid=' + station;
+
+    const t_response = await fetch(url);
+    const t_text = await t_response.text();
+
+    res.send(t_text)
+});
+
+app.get('/quote', async (req, res) => {
+    const url = 'http://quotes.toscrape.com/'
+    const q_response = await fetch(url);
+    const q_text = await q_response.text();
+
+    elem = document.createElement('html')
+    elem.innerHTML = q_text
+    console.log(await elem)
+
+    res.send(q_text)
+});
