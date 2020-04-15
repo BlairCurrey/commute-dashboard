@@ -13,59 +13,66 @@
             <div id="date-time" class="item-a">
                 <p><span id ="date"></span> | <span id="time"></span></p>
             </div>
-            <div class="item-b">
-                <div id="start" class="stream">
+            <div class="item-b card-box">
+                <div id="start" class="card">
                     <h2 class="center">Now</h2>
                     <div class="content">
                         <object id="start-weather-icon" type="image/svg+xml">
                         <!-- weather icon inserted here -->
                         </object>
-                        <p>Temperature: <span id="start-now-temp"></span>&deg;F</p>
-                        <p>Chance of <span id="start-precip-type"></span>: <span id="start-now-precip-chance"></span>%</p>
-                        <p><span id="start-now-summary"></span> now and <span id="start-minutely-summary"></span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="item-c">
-                <div id="train" class="stream">
-                    <h2 class="center">Train Schedule</h2>
-                    <div class="content">
-                        <p id="depart-from"></p>
-                        <p>To: <span id="destination-station"></span></p>
-                        <div id="sched-container">
-                            <table id="sched-table">
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="sched-table-body">
-                                <!-- Table gets inserted here with row format like:
-                                <tr>
-                                    <td>Time</th>
-                                    <td>Status</th>
-                                </tr> -->
-                                </tbody>
-                            </table>
+                        <div class="info">
+                            <p>Temperature: <span id="start-now-temp"></span>&deg;F</p>
+                            <p>Chance of <span id="start-precip-type"></span>: <span id="start-now-precip-chance"></span>%</p>
+                            <p><span id="start-now-summary"></span> now and <span id="start-minutely-summary"></span></p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="item-d">
-                <div id="end" class="stream">
+            <div class="item-c card-box">
+                <div id="train" class="card">
+                    <h2 class="center">Train Schedule</h2>
+                    <div class="content">
+                        <object id="train-icon" type="image/svg+xml" data="icons/train.svg"></object>
+                        <div class="info">
+                            <p id="depart-from"></p>
+                            <p>To: <span id="destination-station"></span></p>
+                            <div id="sched-container">
+                                <table id="sched-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sched-table-body">
+                                    <!-- Table gets inserted here with row format like:
+                                    <tr>
+                                        <td>Time</th>
+                                        <td>Status</th>
+                                    </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item-d card-box">
+                <div id="end" class="card">
                     <h2 class="center">Today</h2>
                     <div class="content">
                         <object id="end-weather-icon" type="image/svg+xml">
                         <!-- weather icon inserted here -->
                         </object>
-                        <p id="end-hourly-summary"></p>
-                        <p>High of <span id="end-high"></span>&deg;F at <span id="end-high-time"></span></p>
-                        <div class="precip">
-                            <p>Overall chance of <span class="end-precip-type"></span>: <span id="end-precip-prob-total"></span>%</p>
-                            <div id="precip-conditional">
-                                <p>Highest chance of <span class="end-precip-type"></span>: <span id="end-precip-prob-high"></span>% at <span id="end-precip-prob-time"></span></p>
-                                <p>Highest intesnsity of <span class="end-precip-type"></span>: <span id="end-precip-intensity-high"></span> inches per hour at <span id="end-precip-intensity-time"></span></p>
+                        <div class="info">
+                            <p id="end-hourly-summary"></p>
+                            <p>High of <span id="end-high"></span>&deg;F at <span id="end-high-time"></span></p>
+                            <div class="precip">
+                                <p>Overall chance of <span class="end-precip-type"></span>: <span id="end-precip-prob-total"></span>%</p>
+                                <div id="precip-conditional">
+                                    <p>Highest chance of <span class="end-precip-type"></span>: <span id="end-precip-prob-high"></span>% at <span id="end-precip-prob-time"></span></p>
+                                    <p>Highest intesnsity of <span class="end-precip-type"></span>: <span id="end-precip-intensity-high"></span> inches per hour at <span id="end-precip-intensity-time"></span></p>
+                                </div>
                             </div>
                         </div>
                     </div>

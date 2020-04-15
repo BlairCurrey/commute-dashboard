@@ -1,5 +1,13 @@
+:root {
+    --primary-blue-color: #57A0EE;
+    --secondary-blue-color: #91C0F8;
+    --primary-green-color: #4CAF50;
+    --nuetral-color: #f5f5f5
+  }
+
 body {
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
 }
 
 .item-a { grid-column: 1 / 7;}
@@ -9,22 +17,78 @@ body {
 
 .grid {
     display: grid;
-    background-color: #f5f5f5;
+    /* background-color: var(--nuetral-color); */
     grid-template-columns: repeat(6, 1fr);
+    /* grid-template-columns: repeat(autofit, minmax(100px, 1fr)); */
     grid-template-rows: auto;
     gap: 1em;
     padding: 1em;
 }
+/* @media only screen and (min-width: 0)  {
+    body {font-size: 0.25em;}
+    object {max-width: 50px;}
+}
+@media only screen and (min-width: 1000px)  {
+    body {font-size: .75em;}
+    object {max-width: 100px;}
+}
+
+@media only screen and (min-width: 1200px)  {
+    body {font-size: 1em;}
+    object {max-width: 250px;}
+}
+
+@media only screen and (min-width: 1400px)  {
+    body {font-size: 1.25em;}
+    object {max-width: 300px;}
+}
+
+@media only screen and (min-width: 1800px)  {
+    body {font-size: 1.5em;}
+    object {max-width: 400px;}
+} */
+
+@media only screen and (max-width: 768px)  {
+    .item-a { grid-column: 1;}
+    .item-b { grid-column: 1;}
+    .item-c { grid-column: 1;}
+    .item-d { grid-column: 1;}
+    
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: auto;
+        gap: 1em;
+        padding: 1em;
+    }
+    /* body{
+        font-size: .5em;
+    }
+    object {
+        max-width: 150px;
+    } */
+}
+.card-box {
+    display: flex;
+}
 
 .grid > div {
     background-color: #fff;
-    border-radius: 0.5em;
+}
+
+.card {
+    overflow: auto;
+    width: 100%;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    /* box-shadow: 5px 5px var(--nuetral-color); */
+    box-shadow: 8px 8px 10px 0px #eee
 }
 
 object {
     display: block;
     margin: auto;
-    max-width: 250px;
+    max-width: 67%;
 }
 
 .center {
@@ -39,6 +103,35 @@ object {
     font-size: 1.5em;
 }
 
-.content {
+/* .content {
+} */
+
+.info {
+    padding: 1em;
+}
+.info p{
+    margin: .25em;
+}
+
+/* table */
+
+table{
+    border-collapse: collapse;
+    border: 1px solid #eee;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #eee;
     padding: 0.5em;
+    text-align: center;
+}
+
+th {
+    color: #eee;
+    background-color: var(--primary-green-color);
+}
+
+tr:nth-child(odd) {
+    background-color: var(--nuetral-color);
 }
