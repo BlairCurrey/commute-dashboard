@@ -196,13 +196,13 @@ class Train{
             let row = document.createElement('tr');
             let time = document.createElement('td');
             let status = document.createElement('td');
-            //Fill html elements
-            let t_text = element[time_pos].innerText
+            //Fill html elements with data
+            let time_text = element[time_pos].textContent.replace(/\s+/g, "")
             //sets to "-" if status is blank, else sets to status
-            let s_text = (element[status_pos].innerText == " ") ? "-" : element[status_pos].innerText
-            time.innerText = t_text
-            status.textContent = s_text
-            //Build row and push to array
+            let status_text = (element[status_pos].textContent == " ") ? "-" : element[status_pos].textContent
+            time.innerText = time_text
+            status.textContent = status_text
+            //Build row and store in array
             row.appendChild(time)
             row.appendChild(status)
             table_rows.push(row)
