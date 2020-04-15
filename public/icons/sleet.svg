@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- (c) ammap.com | SVG weather icons -->
 <svg
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    viewBox="8 17 48 42">
+    viewBox="8 17 48 41">
     <defs>
         <filter id="blur" width="200%" height="200%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
