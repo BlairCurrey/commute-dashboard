@@ -9,25 +9,18 @@ app.use(express.static('public'));
 
 app.listen(port, () => console.log(`Listening on port: ${port} ...`));
 
-const coords = {
-    start: {
-        lat: process.env.START_LAT,
-        lon: process.env.START_LON
-    },    
-    end: {
-        lat: process.env.END_LAT,
-        lon: process.env.END_LON
-    }
-}
-
-app.get('/weather', async (req, res) => {
+app.get('/weather/:start_coords/:end_coords', async (req, res) => {
     const key = process.env.DARKSKY_KEY;
-    const url = 'https://api.darksky.net/forecast/' + key;
+    const base_url = 'https://api.darksky.net/forecast/' + key;
 
-    const start_response = await fetch(url + `/${coords.start.lat},${coords.start.lon}`);
+    //start
+    const [start_lat, start_lon] = req.params.start_coords.split(",");
+    const start_response = await fetch(base_url + `/${start_lat},${start_lon}`);
     const start_json = await start_response.json();
-    
-    const end_response = await fetch(url + `/${coords.end.lat},${coords.end.lon}`);
+
+    //end
+    const [end_lat, end_lon] = req.params.end_coords.split(',')
+    const end_response = await fetch(base_url + `/${end_lat},${end_lon}`);
     const end_json = await end_response.json();
 
     data = {
@@ -38,24 +31,12 @@ app.get('/weather', async (req, res) => {
     res.json(data)
 });
 
-app.get('/train', async (req, res) => {
-    const station = 'WR';
-    const url = 'https://dv.njtransit.com/webdisplay/tid-mobile.aspx?sid=' + station;
+app.get('/train/:depart_id', async (req, res) => {
+    const depart_id = req.params.depart_id;
+    const url = 'https://dv.njtransit.com/webdisplay/tid-mobile.aspx?sid=' + depart_id;
 
     const t_response = await fetch(url);
     const t_text = await t_response.text();
 
     res.send(t_text)
-});
-
-app.get('/quote', async (req, res) => {
-    const url = 'http://quotes.toscrape.com/'
-    const q_response = await fetch(url);
-    const q_text = await q_response.text();
-
-    elem = document.createElement('html')
-    elem.innerHTML = q_text
-    console.log(await elem)
-
-    res.send(q_text)
 });

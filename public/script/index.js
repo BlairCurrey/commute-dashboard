@@ -1,15 +1,19 @@
 class Page{
     constructor(){
         this.time = new Time();
+        // this.start_coords = start_coords;
+        // this.end_coords = end_coords;
+        // this.depart_id = depart_id;
+        // this.destination_str = this.destination_str;
     }
 
     async init(){
-        this.weather = new Weather('/weather');
+        this.weather = new Weather('/weather/40.844972,-74.079847/40.815750,-73.950133');
         await this.weather.init();
         console.log(await this.weather);
         this.rain = new Rain((await this.weather.data).end.hourly.data);
         console.log(this.rain);
-        this.train = new Train('/train', 'Hoboken');
+        this.train = new Train('/train/WR', 'Hoboken');
         await this.train.init();
         console.log(await this.train);
     }
