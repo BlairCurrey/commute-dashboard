@@ -5,6 +5,51 @@
     --nuetral-color: #f5f5f5
   }
 
+#launch-page{
+    margin-top: 5vh;
+}
+
+#card-container {
+    width: 400px;
+    margin: 0 auto;;
+    /* padding: 1rem; */
+}
+
+#launcher-card {
+    background: var(--nuetral-color);
+    padding: 1.5rem;
+}
+
+.form-input {
+    margin-bottom: 0.5rem;
+}
+
+form{
+    width: 325px;
+    margin: 1em auto;
+}
+
+input[type=text], select {
+    height: 2.5em;
+    width: 100%;
+    padding: 0.2em 0.5em;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    background-color: var(--primary-blue-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 1rem 2rem;
+    width: 100%;
+}
+
+input[type=submit]:hover {
+    opacity: 0.8;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
@@ -17,36 +62,11 @@ body {
 
 .grid {
     display: grid;
-    /* background-color: var(--nuetral-color); */
     grid-template-columns: repeat(6, 1fr);
-    /* grid-template-columns: repeat(autofit, minmax(100px, 1fr)); */
     grid-template-rows: auto;
     gap: 1em;
     padding: 1em;
 }
-/* @media only screen and (min-width: 0)  {
-    body {font-size: 0.25em;}
-    object {max-width: 50px;}
-}
-@media only screen and (min-width: 1000px)  {
-    body {font-size: .75em;}
-    object {max-width: 100px;}
-}
-
-@media only screen and (min-width: 1200px)  {
-    body {font-size: 1em;}
-    object {max-width: 250px;}
-}
-
-@media only screen and (min-width: 1400px)  {
-    body {font-size: 1.25em;}
-    object {max-width: 300px;}
-}
-
-@media only screen and (min-width: 1800px)  {
-    body {font-size: 1.5em;}
-    object {max-width: 400px;}
-} */
 
 @media only screen and (max-width: 768px)  {
     .item-a { grid-column: 1;}
@@ -61,12 +81,12 @@ body {
         gap: 1em;
         padding: 1em;
     }
-    /* body{
-        font-size: .5em;
+    body{
+        font-size: 0.8em;
     }
     object {
         max-width: 150px;
-    } */
+    }
 }
 .card-box {
     display: flex;
@@ -91,8 +111,14 @@ object {
     max-width: 67%;
 }
 
+/* Utility styling */
+
 .center {
     text-align: center;
+}
+
+.hidden {
+    display: none;
 }
 
 #date-time{

@@ -7,20 +7,45 @@
         <link rel="stylesheet" href="css/stylesheet.css">
       </head>
       <body>
-        <form action="dashboard.html" method="GET">
-            <label class="hidden" for="start-lat">Enter latitude</label>
-            <input type="text" name="lat1" id="start-lat" placeholder="Latitude"/>
-            <label class="hidden" for="start-lon">Enter longitude</label>
-            <input type="text" name="lon1" id="start-lon" placeholder="Longitude"/>
-            <label class="hidden" for="end-lat">Enter latidude</label>
-            <input type="text" name="lat2" id="end-lat" placeholder="Latitude"/>
-            <label class="hidden" for="end-lon">Enter longitude</label>
-            <input type="text" name="lon2" id="end-lon" placeholder="Longitude"/>
-            <label class="hidden" for="depart-id">Enter Departure ID</label>
-            <input type="text" name="depart_id" id="depart-id" placeholder="Departing ID"/>
-            <label class="hidden" for="destination-str">Enter Destination String</label>
-            <input type="text" name="destination_str" id="destination-str" placeholder="Departing ID">
-            <input type="submit" value="Submit" />
-        </form>
+          <div id="launch-page">
+            <div id="card-container">
+                <div id="launcher-card" class="card">
+                    <form action="dashboard.html" method="GET">
+                        <h1 class="center">Launcher</h1>
+                        <div class="form-input">
+                            <label class="hidden" for="start-lat">Enter latitude</label>
+                            <input type="text" name="lat1" id="start-lat" placeholder="Depart Latitude"/>
+                        </div>
+                        <div class="form-input">
+                            <label class="hidden" for="start-lon">Enter longitude</label>
+                            <input type="text" name="lon1" id="start-lon" placeholder="Depart Longitude"/>
+                        </div>
+                        <div class="form-input">
+                            <label class="hidden" for="end-lat">Enter latidude</label>
+                            <input type="text" name="lat2" id="end-lat" placeholder="Destination Latitude"/>
+                        </div>
+                        <div class="form-input">
+                            <label class="hidden" for="end-lon">Enter longitude</label>
+                            <input type="text" name="lon2" id="end-lon" placeholder="Destination Longitude"/>
+                        </div>
+                        <div class="form-input">
+                            <label class="hidden" for="depart-id">Depart From</label>
+                            <select name="depart_id" id="depart-id">
+                                <option value="WR">Wood-Ridge</option>
+                                <option value="SV">Spring Valley</option>
+                            </select>
+                        </div>
+                        <div class="form-input">
+                            <label class="hidden" for="destination-str">Destination</label>
+                            <select name="destination_str" id="destination-str">
+                                <option value="Hoboken">Hoboken</option>
+                                <option value="Spring Valley">Spring Valley</option>
+                            </select>
+                        </div>
+                        <input type="submit" value="Submit" />
+                    </form>
+                    </div>            
+                </div>
+          </div>
     </body>
 </html>
