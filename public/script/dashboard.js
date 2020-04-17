@@ -215,6 +215,7 @@ class Train{
         this.destroyTableBody();
         await this.init();
         this.render();
+        console.log(this)
     }
 
     buildHTML(){
