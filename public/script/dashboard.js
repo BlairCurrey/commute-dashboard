@@ -13,8 +13,6 @@ class Page{
         this.weather = new Weather(`/weather/${this.start_lat},${this.start_lon}/${this.end_lat},${this.end_lon}`);
         await this.weather.init();
         console.log(await this.weather);
-        this.rain = new Rain((await this.weather.data).end.hourly.data);
-        console.log(this.rain);
         this.train = new Train(`/train/${this.depart_id}`, this.destination_str);
         await this.train.init();
         console.log(await this.train);
@@ -23,8 +21,17 @@ class Page{
     render(){
         this.time.render();
         this.weather.render();
-        this.rain.render();
         this.train.render();
+    }
+
+    static parseQuery(queryString) {
+        let query = {};
+        let pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i].split('=');
+            query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+        }
+        return query;
     }
 }
 
@@ -58,25 +65,40 @@ class Time{
     }
 }
 
-class API{
+class Weather {
     constructor(route){
         this.route = route;
         this.data = null;
+        this.rain = null;
     }
 
     async init(){
         //call after class instantiation - data cannot be fetched in constructor
         await this.get();
+        this.setRain();
+        // this.rain = new Rain((await this.weather.data).end.hourly.data)
     }
 
     async get(){
         const response = await fetch(this.route);
         this.data = await response.json();
     }
-}
 
-class Weather extends API{
+    setRain(){
+        this.rain = new Rain(this.data.end.hourly.data);
+    }
+
+    async update(){
+        console.log('updating weather')
+        await this.get();
+        this.setRain();
+        this.render();
+        console.log(this)
+    }
+
     render(){
+        this.rain.render();
+    
         const start = this.data.start;
         const end = this.data.end;
         const end_high_time = Time.parseTime(new Date(end.daily.data[0].temperatureHighTime * 1000));
@@ -171,6 +193,7 @@ class Train{
     constructor(route, destination){
         this.route = route;
         this.destination = destination //must be included in destination string from departute vision
+        this.table_body_ID = "sched-table-body"
         this.response_string = null;
         this.html = null;
         this.parsed_rows = null;
@@ -188,9 +211,22 @@ class Train{
         this.response_string = await response.text();
     }
 
+    async update(){
+        this.destroyTableBody();
+        await this.init();
+        this.render();
+    }
+
     buildHTML(){
         this.html = document.createElement('html');
         this.html.innerHTML = this.response_string;
+    }
+    
+    destroyTableBody(){
+        let element = document.getElementById(this.table_body_ID);
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
     }
 
     makeTableRows(){
@@ -235,25 +271,17 @@ class Train{
         document.getElementById('destination-station').textContent = this.destination;
         let table_rows = this.makeTableRows()
         table_rows.forEach(row =>{
-            document.getElementById('sched-table-body').appendChild(row)
+            document.getElementById(this.table_body_ID).appendChild(row)
         })
     }
 }
 
-function parseQuery(queryString) {
-    let query = {};
-    let pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
-    for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i].split('=');
-        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
-    }
-    return query;
-}
-
 document.addEventListener("DOMContentLoaded", async function(event) { 
-    parsed_qstring = parseQuery(window.location.search);
+    parsed_qstring = Page.parseQuery(window.location.search);
     page = new Page(parsed_qstring);
     await page.init();
     await page.render();
     setInterval(function(){page.time.update();}, 1000);
+    setInterval(function(){page.weather.update();}, 1_200_000); //every 20 minutes - 1_200_000
+    setInterval(function(){page.train.update();}, 300_000); //every 5 minutes - 300_000
   });
