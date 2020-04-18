@@ -83,8 +83,8 @@ class Weather {
         this.data = await response.json();
     }
 
-    setRain(){
-        this.rain = new Rain(this.data.end.hourly.data);
+    async setRain(){
+        this.rain = new Rain(await this.data.end.hourly.data);
     }
 
     async update(){
