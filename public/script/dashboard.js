@@ -12,10 +12,10 @@ class Page{
     async init(){
         this.weather = new Weather(`/weather/${this.start_lat},${this.start_lon}/${this.end_lat},${this.end_lon}`);
         await this.weather.init();
-        console.log(await this.weather);
+        console.log(this.weather);
         this.train = new Train(`/train/${this.depart_id}`, this.destination_str);
         await this.train.init();
-        console.log(await this.train);
+        console.log(this.train);
     }
 
     render(){
@@ -76,7 +76,6 @@ class Weather {
         //call after class instantiation - data cannot be fetched in constructor
         await this.get();
         this.setRain();
-        // this.rain = new Rain((await this.weather.data).end.hourly.data)
     }
 
     async get(){
@@ -89,7 +88,6 @@ class Weather {
     }
 
     async update(){
-        console.log('updating weather')
         await this.get();
         this.setRain();
         this.render();
