@@ -10,5 +10,4 @@ This is a simple web app to display useful information for commuting. The goal f
 ![Demo](https://i.imgur.com/UEuGwKF.gif)
 
 ## Notes
-- To use the app, '.env_example' should be renamed to '.env' and the values in the file need to be defined. 
 - The animated SVG's are from https://www.amcharts.com/free-animated-svg-weather-icons/
