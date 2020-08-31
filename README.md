@@ -8,6 +8,3 @@ This is a simple web app to display useful information for commuting. The goal f
 
 ## Demo
 ![Demo](https://i.imgur.com/UEuGwKF.gif)
-
-## Notes
-- The animated SVG's are from https://www.amcharts.com/free-animated-svg-weather-icons/
