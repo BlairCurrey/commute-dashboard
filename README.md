@@ -1,5 +1,5 @@
 # commute-dashboard
-https://blairc-commute-dash.herokuapp.com/dashboard.html?lat1=40.844972&lon1=-74.079847&lat2=40.815750&lon2=-73.950133&depart_id=WR&destination_str=Hoboken
+[Try the demo on Heroku](https://blairc-commute-dash.herokuapp.com/dashboard.html?lat1=40.844972&lon1=-74.079847&lat2=40.815750&lon2=-73.950133&depart_id=WR&destination_str=Hoboken)
 
 Alternatively, you can set the location and (in theory) the station from the launcher. https://blairc-commute-dash.herokuapp.com/. However, this only includes the station I was interested in and another as an example. The launcher is more of a prototype.
 
