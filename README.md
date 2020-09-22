@@ -8,3 +8,6 @@ This is a simple web app to display useful information for commuting. The goal f
 
 ## Demo
 ![Demo](https://i.imgur.com/UEuGwKF.gif)
+
+## Note
+Darksky was purchase by Apple and their API will not be supported beyond 2021
