@@ -114,7 +114,7 @@ class Weather {
         document.getElementById('end-hourly-summary').textContent = end.hourly.summary;
         document.getElementById('end-high').textContent = end.daily.data[0].temperatureHigh;
         document.getElementById('end-high-time').textContent = end_high_time;
-        document.getElementById("end-weather-icon").setAttribute("data", `icons/${end.daily.icon}.svg`);
+        document.getElementById("end-weather-icon").setAttribute("data", `icons/${end.hourly.icon}.svg`);
 
         //Fill precip-type classes
         let precip_type_classes = document.querySelectorAll('.end-precip-type')
